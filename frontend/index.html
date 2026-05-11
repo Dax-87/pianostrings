@@ -548,7 +548,7 @@ sections:
 <script>
 const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? window.location.origin + '/pianostrings/backend/public/api'
-  : 'http://localhost:8888/pianostrings/backend/public/api';
+  : window.location.origin + '/api';
 
 let cache = { brands: null, models: {}, strings: {}, gaugeRef: null, steinway: null };
 let currentModel = null;
