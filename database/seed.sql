@@ -241,3 +241,6 @@ VALUES
 ('Model E-85 Note',            25, 0, 0, 4, 4, 4, 4, 4, 4, 8, 8,  8, 0,  6, 0, 0, 0, 0, 0),
 ('Model V',                    26, 0, 0, 6, 4, 4, 4, 4, 4, 9, 8,  8, 0,  9, 0, 0, 0, 0, 0),
 ('Model K (Vertegrand)',       27, 0, 0, 6, 4, 4, 4, 4, 4, 9, 8,  8, 0, 11, 0, 0, 0, 0, 0);
+
+-- Admin user (password: admin)
+INSERT INTO `ps_admins` (`username`, `password`) VALUES ('admin', '$2y$12$ThAyeWV518QGc0XbG8blfOCzYhiNDRbj30MqUrocCPPKFbFmFJAg2');

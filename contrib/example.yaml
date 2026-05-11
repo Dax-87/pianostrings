@@ -1,0 +1,54 @@
+# =============================================================================
+# PianoStringDB — Contribution Template
+# =============================================================================
+# Fill in the fields below and submit via GitHub Pull Request.
+# The system will automatically calculate diameter (mm), weight (g/m),
+# and tension (kg) from the European gauge number.
+# You only need to specify the string sections for each gauge!
+# =============================================================================
+
+# Brand name (required)
+brand: Yamaha
+
+# Model code (required, short identifier)
+model: U3
+
+# Full model name (required)
+model_name: U3 — 131 cm upright
+
+# Total number of strings (default 88)
+total_strings: 88
+
+# Your name (optional, for credit)
+contributor: Mario Rossi
+
+# Your email (optional)
+contributor_email: mario@example.com
+
+# String sections — list each range of consecutive strings that share
+# the same gauge, type, and copper winding.
+#
+# Fields:
+#   from     — first string number (1 = lowest bass note A0)
+#   to       — last string number (88 = highest treble note C8)
+#   type     — "plain" for bare steel, "wound1" for single copper wrap,
+#              "wound2" for double copper wrap
+#   gauge    — European gauge number (e.g. 13, 13.5, 14, 15, 16, 17, etc.)
+#   copper1  — first copper winding gauge (only for wound strings)
+#   copper2  — second copper winding gauge (only for wound2 strings)
+#
+# IMPORTANT: Make sure the sections cover ALL strings from 1 to 88
+# without gaps or overlaps.
+#
+sections:
+  - from: 1     to: 8     type: wound2  gauge: 14    copper1: 12    copper2: 6
+  - from: 9     to: 16    type: wound1  gauge: 17    copper1: 8
+  - from: 17    to: 46    type: plain   gauge: 17
+  - from: 47    to: 51    type: plain   gauge: 16.5
+  - from: 52    to: 56    type: plain   gauge: 16
+  - from: 57    to: 62    type: plain   gauge: 15.5
+  - from: 63    to: 68    type: plain   gauge: 15
+  - from: 69    to: 73    type: plain   gauge: 14.5
+  - from: 74    to: 78    type: plain   gauge: 14
+  - from: 79    to: 82    type: plain   gauge: 13.5
+  - from: 83    to: 88    type: plain   gauge: 13
