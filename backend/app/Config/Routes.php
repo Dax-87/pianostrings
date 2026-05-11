@@ -21,6 +21,7 @@ $routes->group('api', static function ($routes) {
     $routes->get('strings/(:segment)',        'Api\Strings::byModel/$1');
     $routes->get('gauge-reference',           'Api\GaugeReference::index');
     $routes->get('official-steinway',         'Api\OfficialSteinway::index');
+    $routes->post('contributions',            'Api\Contributions::create');
 
     // Auth
     $routes->post('auth/login',               'Api\Auth::login');

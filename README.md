@@ -4,7 +4,7 @@ Open database of piano string measurements. A reference tool for piano technicia
 
 - **REST API** — CodeIgniter 4 backend
 - **Frontend** — Static HTML/JS, no build tools, works out of the box
-- **Admin panel** — Approve/reject community contributions (`admin.html`)
+- **Admin panel** — Approve/reject community contributions (`/admin`)
 - **Bilingual** — English and Italian UI
 
 ## Quick start
@@ -50,7 +50,7 @@ php spark db:seed AdminSeeder
 Point your web server to `backend/public/` (or use MAMP).
 
 - **Frontend:** `frontend/index.html`
-- **Admin:** `frontend/admin.html`
+- **Admin:** `backend/public/admin` (CI4 controller views)
 - **API:** `backend/public/api/...`
 
 ## API Endpoints
@@ -67,12 +67,13 @@ Point your web server to `backend/public/` (or use MAMP).
 | `GET /api/admin/contributions` | List contributions (auth) |
 | `POST /api/admin/contributions/{id}/approve` | Approve (auth) |
 | `POST /api/admin/contributions/{id}/reject` | Reject (auth) |
+| `POST /api/contributions` | Submit a new contribution (public) |
 
 ## How to contribute
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
-**Quick version:** Copy `contrib/example.yaml`, fill in the string sections for your piano model, and submit a Pull Request on GitHub. Only specify brand, model, and gauge numbers — the system calculates diameters automatically.
+**Quick version:** Use the **Contribute** tab in the web app to fill out the form, or upload a YAML file directly. Alternatively, copy `contrib/example.yaml`, fill in the string sections for your piano model, and submit a Pull Request on GitHub. Only specify brand, model, and gauge numbers — the system calculates diameters automatically.
 
 ## License
 

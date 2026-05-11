@@ -47,7 +47,7 @@ form.inline{display:inline}
     <h1>PianoStringDB · Admin</h1>
     <div class="header-right">
       <span><?= session('admin_user') ?></span>
-      <a href="/admin/logout" class="btn btn-sm btn-outline">Logout</a>
+      <a href="<?= base_url('admin/logout') ?>" class="btn btn-sm btn-outline">Logout</a>
     </div>
   </div>
 
@@ -56,9 +56,9 @@ form.inline{display:inline}
   <?php endif; ?>
 
   <div class="tabs">
-    <a href="/admin/dashboard?status=pending"  class="btn btn-sm btn-outline <?= $current_status === 'pending' ? 'active' : '' ?>">Pending (<?= $count_pending ?>)</a>
-    <a href="/admin/dashboard?status=approved" class="btn btn-sm btn-outline <?= $current_status === 'approved' ? 'active' : '' ?>">Approved (<?= $count_approved ?>)</a>
-    <a href="/admin/dashboard?status=rejected" class="btn btn-sm btn-outline <?= $current_status === 'rejected' ? 'active' : '' ?>">Rejected (<?= $count_rejected ?>)</a>
+    <a href="<?= base_url('admin/dashboard?status=pending') ?>"  class="btn btn-sm btn-outline <?= $current_status === 'pending' ? 'active' : '' ?>">Pending (<?= $count_pending ?>)</a>
+    <a href="<?= base_url('admin/dashboard?status=approved') ?>" class="btn btn-sm btn-outline <?= $current_status === 'approved' ? 'active' : '' ?>">Approved (<?= $count_approved ?>)</a>
+    <a href="<?= base_url('admin/dashboard?status=rejected') ?>" class="btn btn-sm btn-outline <?= $current_status === 'rejected' ? 'active' : '' ?>">Rejected (<?= $count_rejected ?>)</a>
   </div>
 
   <?php if (empty($contributions)): ?>
@@ -92,17 +92,17 @@ form.inline{display:inline}
         <?php endif; ?>
         <div class="actions">
           <?php if ($c->status === 'pending'): ?>
-            <form method="post" action="/admin/approve/<?= $c->id ?>" class="inline">
+            <form method="post" action="<?= base_url('admin/approve/' . $c->id) ?>" class="inline">
               <?= csrf_field() ?>
               <button type="submit" class="btn btn-sm btn-green">Approve</button>
             </form>
-            <form method="post" action="/admin/reject/<?= $c->id ?>" class="inline" onsubmit="return confirm('Reject this contribution?')">
+            <form method="post" action="<?= base_url('admin/reject/' . $c->id) ?>" class="inline" onsubmit="return confirm('Reject this contribution?')">
               <?= csrf_field() ?>
               <input type="text" name="admin_notes" class="notes-input" placeholder="Reason (optional)">
               <button type="submit" class="btn btn-sm btn-red">Reject</button>
             </form>
           <?php else: ?>
-            <form method="post" action="/admin/delete/<?= $c->id ?>" class="inline" onsubmit="return confirm('Delete?')">
+            <form method="post" action="<?= base_url('admin/delete/' . $c->id) ?>" class="inline" onsubmit="return confirm('Delete?')">
               <?= csrf_field() ?>
               <button type="submit" class="btn btn-sm btn-outline">Delete</button>
             </form>

@@ -23,7 +23,15 @@ The system automatically calculates:
 - Weight in g/m
 - Tension in kg
 
-## How to contribute via GitHub (recommended)
+## How to contribute
+
+### Option A: Web form (quick)
+
+Go to the [PianoStringDB web app](https://pianostrings.vercel.app), click the **Contribute** tab, fill out the form and submit. Data will be reviewed by an admin.
+
+You can also **upload a YAML file** using the drag & drop area in the Contribute page — the form will auto-fill.
+
+### Option B: GitHub Pull Request (recommended for frequent contributors)
 
 1. **Copy the template:** Open [`contrib/example.yaml`](contrib/example.yaml) and copy its contents
 

@@ -24,7 +24,7 @@ h2{font-family:'Cormorant Garamond',serif;font-weight:300;color:var(--accent);ma
 <div class="login-box">
   <h2>PianoStringDB · Admin</h2>
   <div class="error"><?= session('error') ?></div>
-  <form method="post" action="/admin/login">
+  <form method="post" action="<?= base_url('admin/login') ?>">
     <?= csrf_field() ?>
     <div class="field"><label>Username</label><input type="text" name="username" required autofocus></div>
     <div class="field"><label>Password</label><input type="password" name="password" required></div>

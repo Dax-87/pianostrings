@@ -182,6 +182,37 @@
     margin-left:auto;
   }
   .btn-toggle-table:hover { border-color:var(--accent); color:var(--accent); }
+  .contribute-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px;box-shadow:var(--card-shadow)}
+  .contrib-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+  .contrib-sections-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3)}
+  .contrib-note{font-size:.6rem;color:var(--text3);margin-bottom:12px;line-height:1.6}
+  .contrib-sections{width:100%;border-collapse:collapse;font-size:.72rem;margin-bottom:20px}
+  .contrib-sections th{padding:6px 8px;font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);text-align:left;font-weight:400}
+  .contrib-sections td{padding:5px 8px;border-bottom:1px solid var(--border)}
+  .contrib-sections input,.contrib-sections select{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text);outline:none;width:100%;transition:border-color .2s}
+  .contrib-sections input:focus,.contrib-sections select:focus{border-color:var(--accent)}
+  .contrib-sections .btn-sm{padding:4px 10px;font-size:.5rem}
+  .btn-contrib{width:100%;background:var(--accent);color:var(--bg);border:none;border-radius:8px;padding:12px;font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+  .btn-contrib:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 20px var(--accent-glow)}
+  #contribResult{margin-top:14px;padding:12px 16px;border-radius:8px;font-size:.7rem;display:none}
+  #contribResult.success{display:block;background:rgba(74,158,122,.15);border:1px solid var(--green);color:var(--green)}
+  #contribResult.error{display:block;background:rgba(200,80,80,.15);border:1px solid var(--red);color:var(--red)}
+  .contrib-yaml-upload{border:2px dashed var(--border);border-radius:12px;padding:24px;margin-bottom:16px;text-align:center;transition:border-color .2s,background .2s;cursor:pointer}
+  .contrib-yaml-upload:hover,.contrib-yaml-upload.dragover{border-color:var(--accent);background:var(--accent-glow)}
+  .yaml-upload-inner{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.7rem;color:var(--text3)}
+  .yaml-upload-icon{color:var(--accent);opacity:.6}
+  .contrib-example{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden}
+  .contrib-example-header{padding:12px 16px;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none;transition:color .2s}
+  .contrib-example-header:hover{color:var(--accent)}
+  .contrib-example-header .arrow{font-size:.55rem;transition:transform .2s}
+  .contrib-example-header .arrow.open{transform:rotate(90deg)}
+  .contrib-example-body{display:none;border-top:1px solid var(--border);padding:16px}
+  .contrib-example-body.visible{display:block}
+  .contrib-example-body pre{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:14px;font-size:.68rem;color:var(--text2);overflow-x:auto;line-height:1.65;font-family:'DM Mono',monospace;tab-size:2}
+  .contrib-example-note{font-size:.6rem;color:var(--text3);margin-top:12px}
+  .contrib-example-link{color:var(--accent);text-decoration:underline;font-size:.68rem}
+  .contrib-example-link:hover{color:var(--accent2)}
+  @media(max-width:700px){.contrib-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -194,6 +225,7 @@
           <button class="nav-tab active" onclick="showPage('lookup')" data-it="Ricerca" data-en="Search">Search</button>
           <button class="nav-tab" onclick="showPage('gauges')" data-it="Sistema di numerazione" data-en="Gauge Systems">Gauge Systems</button>
           <button class="nav-tab" onclick="showPage('steinway')" data-it="Steinway Ufficiale" data-en="Official Steinway">Official Steinway</button>
+          <button class="nav-tab" onclick="showPage('contribute')" data-it="Contribuisci" data-en="Contribute">Contribute</button>
         </div>
       <div class="theme-toggle">
         <button id="btnDark" class="active" onclick="setTheme('dark')">Dark</button>
@@ -362,7 +394,109 @@
   <strong data-it="Raccomandazione:" data-en="Recommendation:">Recommendation:</strong> <span data-it="Acquistare sempre filo d'acciaio nella confezione originale di fabbrica, da produttori con processi certificati. Nel mondo non esiste un sistema unificato di numerazione — specificare sempre il diametro in mm quando si ordina all'estero." data-en="Always buy steel wire in the original factory packaging from manufacturers with certified processes. There is no unified numbering system worldwide — always specify the diameter in mm when ordering from abroad.">Always buy steel wire in the original factory packaging from manufacturers with certified processes. There is no unified numbering system worldwide — always specify the diameter in mm when ordering from abroad.</span>
 </div>
   </div>
-  <!-- PAGE 3: STEINWAY OFFICIAL -->
+  <!-- PAGE 4: CONTRIBUTE -->
+  <div class="page" id="page-contribute">
+    <div class="section-title" data-it="Contribuisci i tuoi dati" data-en="Contribute your data">Contribute your data</div>
+    <div class="section-sub" data-it="Compila il form o carica un file YAML. I dati saranno revisionati da un amministratore prima di essere pubblicati." data-en="Fill out the form or upload a YAML file. Data will be reviewed by an admin before going live.">Fill out the form or upload a YAML file. Data will be reviewed by an admin before going live.</div>
+
+    <div class="contrib-yaml-upload" id="yamlUploadArea">
+      <div class="yaml-upload-inner">
+        <div class="yaml-upload-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div data-it="Carica file YAML (.yaml) per compilare automaticamente il form" data-en="Upload YAML file (.yaml) to auto-fill the form">Upload YAML file (.yaml) to auto-fill the form</div>
+        <input type="file" id="yamlFileInput" accept=".yaml,.yml" onchange="loadYamlFile(event)" style="display:none">
+        <button type="button" class="btn btn-sm" onclick="document.getElementById('yamlFileInput').click()" style="margin-top:8px" data-it="Scegli file" data-en="Choose file">Choose file</button>
+      </div>
+    </div>
+
+    <!-- Inline YAML example -->
+    <div class="contrib-example">
+      <div class="contrib-example-header" onclick="this.nextElementSibling.classList.toggle('visible');this.querySelector('.arrow').classList.toggle('open')">
+        <span class="arrow">&#9654;</span>
+        <span data-it="Esempio formato YAML" data-en="YAML format example">YAML format example</span>
+      </div>
+      <div class="contrib-example-body">
+<pre>brand: Yamaha
+model: U3
+model_name: U3 — 131 cm upright
+total_strings: 88
+contributor: Mario Rossi
+contributor_email: mario@example.com
+sections:
+  - from: 1     to: 8     type: wound2  gauge: 14    copper1: 12  copper2: 6
+  - from: 9     to: 16    type: wound1  gauge: 17    copper1: 8
+  - from: 17    to: 46    type: plain   gauge: 17
+  - from: 47    to: 51    type: plain   gauge: 16.5
+  - from: 52    to: 56    type: plain   gauge: 16
+  - from: 57    to: 62    type: plain   gauge: 15.5
+  - from: 63    to: 68    type: plain   gauge: 15
+  - from: 69    to: 73    type: plain   gauge: 14.5
+  - from: 74    to: 78    type: plain   gauge: 14
+  - from: 79    to: 82    type: plain   gauge: 13.5
+  - from: 83    to: 88    type: plain   gauge: 13
+</pre>
+        <div class="contrib-example-note" data-it="Puoi anche contribuire via GitHub: copia il template" data-en="You can also contribute via GitHub: copy the template">You can also contribute via GitHub: copy the template</div>
+        <a href="https://github.com/Dax-87/pianostrings/blob/main/contrib/example.yaml" class="contrib-example-link" target="_blank">contrib/example.yaml</a>
+        <span data-it="e crea una Pull Request." data-en="and create a Pull Request.">and create a Pull Request.</span>
+      </div>
+    </div>
+
+    <div class="contribute-card">
+      <form id="contributeForm" onsubmit="submitContribution(event)">
+        <div class="contrib-grid">
+          <div class="field-group">
+            <label data-it="Marca" data-en="Brand">Brand</label>
+            <input type="text" id="contribBrand" placeholder="e.g. Steinway, Yamaha, Petrof">
+          </div>
+          <div class="field-group">
+            <label data-it="Modello" data-en="Model">Model</label>
+            <input type="text" id="contribModel" placeholder="e.g. Model B">
+          </div>
+          <div class="field-group">
+            <label data-it="Codice modello" data-en="Model code">Model code</label>
+            <input type="text" id="contribCode" placeholder="e.g. B">
+          </div>
+          <div class="field-group">
+            <label data-it="N° corde" data-en="Total strings">Total strings</label>
+            <input type="number" id="contribStrings" value="88" min="1" max="108">
+          </div>
+          <div class="field-group">
+            <label data-it="Il tuo nome" data-en="Your name">Your name</label>
+            <input type="text" id="contribName" placeholder="optional">
+          </div>
+          <div class="field-group">
+            <label data-it="La tua email" data-en="Your email">Your email</label>
+            <input type="email" id="contribEmail" placeholder="optional">
+          </div>
+        </div>
+
+        <div class="contrib-sections-header">
+          <span data-it="Sezioni corde" data-en="String sections">String sections</span>
+          <button type="button" class="btn btn-sm" onclick="addSectionRow()" data-it="+ Aggiungi sezione" data-en="+ Add section">+ Add section</button>
+        </div>
+        <div class="contrib-note" data-it="Ogni sezione rappresenta un gruppo di corde consecutive con la stessa tipologia e gauge (es. corde 1–10 rivestite rame)." data-en="Each section represents a group of consecutive strings with the same type and gauge (e.g. strings 1–10 copper wound).">Each section represents a group of consecutive strings with the same type and gauge (e.g. strings 1–10 copper wound).</div>
+        <table class="contrib-sections" id="sectionsTable">
+          <thead>
+            <tr>
+              <th data-it="Da corda" data-en="From">From</th>
+              <th data-it="A corda" data-en="To">To</th>
+              <th data-it="Tipo" data-en="Type">Type</th>
+              <th>Gauge</th>
+              <th data-it="1° rame" data-en="1st Cu">1st Cu</th>
+              <th data-it="2° rame" data-en="2nd Cu">2nd Cu</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sectionsBody">
+          </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-contrib" data-it="Invia contributo →" data-en="Submit contribution →">Submit contribution →</button>
+      </form>
+      <div id="contribResult"></div>
+    </div>
+  </div>
   <div class="page" id="page-steinway">
     <div class="section-title" data-it="Steinway — Guida ufficiale misure" data-en="Steinway — Official Wire Guide">Steinway — Official Wire Guide</div>
     <div class="section-sub" data-it="Steel Wire Sizes per pianoforti a coda e verticali · Numero di note per gauge" data-en="Steel Wire Sizes for Steinway Grands & Verticals · Number of Notes per Gauge">Steel Wire Sizes for Steinway Grands & Verticals · Number of Notes per Gauge</div>
@@ -405,6 +539,7 @@
 </div>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 <script>
 const API_BASE = window.location.origin + '/pianostrings/backend/public/api';
 
@@ -796,11 +931,162 @@ function noteToCorda(noteStr) {
   return (str >= 1 && str <= 88) ? str : null;
 }
 
+// ─── CONTRIBUTE ─────────────────────────────────────────────────────────────
+function addSectionRow(from, to, type, gauge, cu1, cu2) {
+  const tbody = document.getElementById('sectionsBody');
+  const tr = document.createElement('tr');
+  const idx = tbody.children.length;
+  tr.innerHTML =
+    '<td><input type="number" class="sec-from" value="' + (from || '') + '" min="1" max="88" placeholder="1"></td>' +
+    '<td><input type="number" class="sec-to" value="' + (to || '') + '" min="1" max="88" placeholder="10"></td>' +
+    '<td><select class="sec-type">' +
+      '<option value="plain" ' + (type === 'plain' ? 'selected' : '') + '>' + (currentLang === 'it' ? 'Liscia' : 'Plain') + '</option>' +
+      '<option value="wound1" ' + (type === 'wound1' ? 'selected' : '') + '>' + (currentLang === 'it' ? '1° avv.' : '1st wrap') + '</option>' +
+      '<option value="wound2" ' + (type === 'wound2' ? 'selected' : '') + '>' + (currentLang === 'it' ? '2° avv.' : '2nd wrap') + '</option>' +
+    '</select></td>' +
+    '<td><input type="number" class="sec-gauge" step=".5" min="7" max="30" value="' + (gauge || '') + '" placeholder="13"></td>' +
+    '<td><input type="number" class="sec-cu1" step=".1" min="0" value="' + (cu1 || '') + '" placeholder="—"></td>' +
+    '<td><input type="number" class="sec-cu2" step=".1" min="0" value="' + (cu2 || '') + '" placeholder="—"></td>' +
+    '<td><button type="button" class="btn btn-sm btn-outline" onclick="this.closest(\'tr\').remove()" style="font-size:.5rem;padding:4px 8px">✕</button></td>';
+  tbody.appendChild(tr);
+}
+async function submitContribution(e) {
+  e.preventDefault();
+  const result = document.getElementById('contribResult');
+  result.className = '';
+  result.style.display = 'none';
+
+  const rows = document.querySelectorAll('#sectionsBody tr');
+  if (!rows.length) {
+    result.className = 'error';
+    result.textContent = currentLang === 'it' ? 'Aggiungi almeno una sezione' : 'Add at least one section';
+    result.style.display = 'block';
+    return;
+  }
+  const sections = [];
+  for (const row of rows) {
+    const from = parseInt(row.querySelector('.sec-from').value);
+    const to = parseInt(row.querySelector('.sec-to').value);
+    const type = row.querySelector('.sec-type').value;
+    const gauge = parseFloat(row.querySelector('.sec-gauge').value);
+    if (!from || !to || !gauge) {
+      result.className = 'error';
+      result.textContent = currentLang === 'it' ? 'Compila tutti i campi obbligatori' : 'Fill all required fields';
+      result.style.display = 'block';
+      return;
+    }
+    const sec = { from, to, type, gauge };
+    const cu1 = parseFloat(row.querySelector('.sec-cu1').value);
+    const cu2 = parseFloat(row.querySelector('.sec-cu2').value);
+    if (!isNaN(cu1)) sec.copper1 = cu1;
+    if (!isNaN(cu2)) sec.copper2 = cu2;
+    sections.push(sec);
+  }
+
+  const payload = {
+    brand_name: document.getElementById('contribBrand').value,
+    model_name: document.getElementById('contribModel').value.trim(),
+    model_code: document.getElementById('contribCode').value.trim(),
+    total_strings: parseInt(document.getElementById('contribStrings').value) || 88,
+    contributor: document.getElementById('contribName').value.trim() || undefined,
+    contributor_email: document.getElementById('contribEmail').value.trim() || undefined,
+    sections,
+  };
+
+  if (!payload.brand_name || !payload.model_name || !payload.model_code) {
+    result.className = 'error';
+    result.textContent = currentLang === 'it' ? 'Compila marca, modello e codice' : 'Fill brand, model and code';
+    result.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch(API_BASE + '/contributions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      result.className = 'success';
+      result.textContent = currentLang === 'it' ? 'Contributo inviato! Sarà revisionato da un amministratore.' : 'Contribution submitted! It will be reviewed by an admin.';
+      document.getElementById('contributeForm').reset();
+      document.getElementById('sectionsBody').innerHTML = '';
+      addSectionRow(1, 10, 'wound1', 20, 1.5, 0.5);
+      addSectionRow(11, 88, 'plain', 14);
+    } else {
+      const msg = data.messages ? Object.values(data.messages).join('; ') : (data.message || 'Error');
+      result.className = 'error';
+      result.textContent = msg;
+    }
+  } catch (err) {
+    result.className = 'error';
+    result.textContent = currentLang === 'it' ? 'Errore di connessione' : 'Connection error';
+  }
+  result.style.display = 'block';
+}
+
+// ─── YAML UPLOAD ─────────────────────────────────────────────────────────────
+function loadYamlFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = jsyaml.load(e.target.result);
+      if (data.brand) document.getElementById('contribBrand').value = data.brand;
+      if (data.model) document.getElementById('contribCode').value = data.model;
+      if (data.model_name) document.getElementById('contribModel').value = data.model_name;
+      if (data.total_strings) document.getElementById('contribStrings').value = data.total_strings;
+      if (data.contributor) document.getElementById('contribName').value = data.contributor;
+      if (data.contributor_email) document.getElementById('contribEmail').value = data.contributor_email;
+      if (data.sections && Array.isArray(data.sections)) {
+        const tbody = document.getElementById('sectionsBody');
+        tbody.innerHTML = '';
+        for (const s of data.sections) {
+          addSectionRow(s.from, s.to, s.type, s.gauge, s.copper1, s.copper2);
+        }
+      }
+      document.getElementById('yamlFileInput').value = '';
+    } catch (err) {
+      document.getElementById('contribResult').className = 'error';
+      document.getElementById('contribResult').textContent = 'YAML parse error: ' + err.message;
+      document.getElementById('contribResult').style.display = 'block';
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ─── DRAG & DROP ─────────────────────────────────────────────────────────────
+(function() {
+  const area = document.getElementById('yamlUploadArea');
+  if (!area) return;
+  area.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    area.classList.add('dragover');
+  });
+  area.addEventListener('dragleave', function(e) {
+    area.classList.remove('dragover');
+  });
+  area.addEventListener('drop', function(e) {
+    e.preventDefault();
+    area.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length) {
+      const input = document.getElementById('yamlFileInput');
+      input.files = files;
+      loadYamlFile({target: {files: files}});
+    }
+  });
+})();
+
 // ─── INIT ───────────────────────────────────────────────────────────────────
 selectLang('en');
 initBrands();
 buildGaugeTable();
 buildSteinwayOfficialTable();
+addSectionRow(1, 10, 'wound1', 20, 1.5, 0.5);
+addSectionRow(11, 88, 'plain', 14);
 </script>
 </body>
 </html>
