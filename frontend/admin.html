@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PianoStringDB — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0f;--bg2:#13131a;--bg3:#1a1a24;--border:#2a2a38;--border2:#3a3a50;--text:#e8e4dc;--text2:#a09890;--text3:#6a6278;--accent:#c8a96e;--accent2:#e8c98e;--accent-glow:rgba(200,169,110,0.15);--green:#4a9e7a;--red:#c85050}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:960px;margin:0 auto;padding:40px 20px}
+h1{font-family:'Cormorant Garamond',serif;font-weight:300;color:var(--accent);font-size:1.5rem}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.header-right{display:flex;align-items:center;gap:12px;font-size:.7rem;color:var(--text3)}
+.btn{background:var(--accent);color:var(--bg);border:none;border-radius:7px;font-family:'DM Mono',monospace;font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--accent2);box-shadow:0 6px 20px var(--accent-glow)}
+.btn-sm{padding:5px 12px;font-size:.55rem}
+.btn-green{background:var(--green)}
+.btn-red{background:var(--red)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text3)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);background:transparent;box-shadow:none}
+.btn-outline.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.msg{background:rgba(74,158,122,.15);border:1px solid var(--green);border-radius:7px;padding:10px 14px;font-size:.7rem;color:var(--green);margin-bottom:14px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:14px}
+.meta{font-size:.62rem;color:var(--text3);margin-bottom:6px}
+.title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--accent);margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:.68rem}
+th{text-align:left;padding:4px 8px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:400}
+td{padding:4px 8px;border-bottom:1px solid var(--border);color:var(--text2)}
+.actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase}
+.badge-pending{background:rgba(200,169,110,.15);color:var(--accent);border:1px solid var(--accent)}
+.badge-approved{background:rgba(74,158,122,.15);color:var(--green);border:1px solid var(--green)}
+.badge-rejected{background:rgba(200,80,80,.15);color:var(--red);border:1px solid var(--red)}
+.empty{text-align:center;padding:40px;color:var(--text3);font-size:.7rem}
+form.inline{display:inline}
+.notes-input{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text);outline:none;width:200px;margin-right:6px}
+.notes-input:focus{border-color:var(--accent)}
+.rejected-note{font-size:.62rem;color:var(--text3);margin-top:6px;padding:6px 10px;background:var(--bg3);border-radius:5px}
+.login-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:32px;max-width:380px;margin:80px auto;box-shadow:var(--card-shadow,0 4px 24px rgba(0,0,0,0.4))}
+.login-card h2{font-family:'Cormorant Garamond',serif;font-weight:300;color:var(--accent);font-size:1.3rem;margin-bottom:20px;text-align:center}
+.login-card label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:6px}
+.login-card input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem;padding:10px 13px;outline:none;margin-bottom:16px;transition:border-color .2s}
+.login-card input:focus{border-color:var(--accent)}
+.login-card .btn{width:100%;padding:11px}
+.login-error{font-size:.65rem;color:var(--red);text-align:center;margin-top:10px;display:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <div id="loginView">
+    <div class="login-card">
+      <h2>PianoStringDB · Admin</h2>
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin">
+      <label>Password</label>
+      <input type="password" id="loginPass" onkeydown="if(event.key==='Enter')doLogin()" placeholder="******">
+      <button class="btn" onclick="doLogin()">Login</button>
+      <div class="login-error" id="loginError">Invalid credentials</div>
+    </div>
+  </div>
+  <div id="dashboardView" style="display:none">
+    <div class="header">
+      <h1>PianoStringDB · Admin</h1>
+      <div class="header-right">
+        <span id="adminUser"></span>
+        <a href="#" class="btn btn-sm btn-outline" onclick="doLogout()">Logout</a>
+      </div>
+    </div>
+    <div id="dashMsg" class="msg" style="display:none"></div>
+    <div class="tabs">
+      <button class="btn btn-sm btn-outline active" onclick="loadContributions('pending',this)" id="tabPending">Pending</button>
+      <button class="btn btn-sm btn-outline" onclick="loadContributions('approved',this)" id="tabApproved">Approved</button>
+      <button class="btn btn-sm btn-outline" onclick="loadContributions('rejected',this)" id="tabRejected">Rejected</button>
+    </div>
+    <div id="contribList"></div>
+  </div>
+</div>
+<script>
+const API = window.location.origin + '/api';
+
+function getToken() { return localStorage.getItem('admin_token'); }
+
+async function apiFetch(path, opts = {}) {
+  const token = getToken();
+  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  const res = await fetch(API + path, { ...opts, headers });
+  const data = await res.json();
+  if (!res.ok && res.status === 401 && path !== '/auth/login') {
+    showLogin();
+    return null;
+  }
+  return { ok: res.ok, status: res.status, data };
+}
+
+async function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const r = await apiFetch('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ username: user, password: pass }),
+  });
+  if (r && r.ok) {
+    localStorage.setItem('admin_token', r.data.token);
+    localStorage.setItem('admin_username', r.data.username);
+    showDashboard();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  apiFetch('/auth/logout', { method: 'POST' });
+  localStorage.removeItem('admin_token');
+  localStorage.removeItem('admin_username');
+  showLogin();
+}
+
+function showLogin() {
+  document.getElementById('loginView').style.display = 'block';
+  document.getElementById('dashboardView').style.display = 'none';
+}
+
+async function showDashboard() {
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('dashboardView').style.display = 'block';
+  document.getElementById('adminUser').textContent = localStorage.getItem('admin_username') || 'admin';
+  await loadContributions('pending');
+}
+
+async function loadContributions(status, btn) {
+  document.querySelectorAll('.tabs .btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const list = document.getElementById('contribList');
+  list.innerHTML = '<div class="empty">Loading...</div>';
+  const r = await apiFetch('/admin/contributions' + (status ? '?status=' + status : ''));
+  if (!r) return;
+  const contribs = r.data;
+  if (!contribs.length) {
+    list.innerHTML = '<div class="empty">No contributions found</div>';
+    return;
+  }
+  document.getElementById('tabPending').textContent = 'Pending';
+  document.getElementById('tabApproved').textContent = 'Approved';
+  document.getElementById('tabRejected').textContent = 'Rejected';
+  let html = '';
+  for (const c of contribs) {
+    const sections = c.sections || [];
+    let rows = '';
+    for (let i = 0; i < sections.length; i++) {
+      const s = sections[i];
+      rows += '<tr><td>' + (i + 1) + '</td><td>' + s.from + '</td><td>' + s.to + '</td><td>' + s.type + '</td><td>' + s.gauge + '</td><td>' + (s.copper1 || '—') + '</td><td>' + (s.copper2 || '—') + '</td></tr>';
+    }
+    const date = c.created_at ? c.created_at.slice(0, 10) : '';
+    html += '<div class="card">' +
+      '<div class="meta"><span class="badge badge-' + c.status + '">' + c.status + '</span> · ' + date + (c.contributor ? ' · by ' + escHtml(c.contributor) : '') + (c.source_file ? ' · ' + escHtml(c.source_file) : '') + '</div>' +
+      '<div class="title">' + escHtml(c.brand_name) + ' — ' + escHtml(c.model_name) + ' (' + escHtml(c.model_code) + ')</div>' +
+      '<table><tr><th>#</th><th>From</th><th>To</th><th>Type</th><th>Gauge</th><th>Cu1</th><th>Cu2</th></tr>' + rows + '</table>' +
+      (c.status === 'rejected' && c.admin_notes ? '<div class="rejected-note">' + escHtml(c.admin_notes) + '</div>' : '') +
+      '<div class="actions">' +
+        actionBtns(c) +
+      '</div></div>';
+  }
+  list.innerHTML = html;
+}
+
+function actionBtns(c) {
+  if (c.status === 'pending') {
+    return '<button class="btn btn-sm btn-green" onclick="doApprove(' + c.id + ')">Approve</button>' +
+      '<input class="notes-input" id="notes-' + c.id + '" placeholder="Reason"><button class="btn btn-sm btn-red" onclick="doReject(' + c.id + ')">Reject</button>';
+  }
+  return '<button class="btn btn-sm btn-outline" onclick="doDelete(' + c.id + ')">Delete</button>';
+}
+
+async function doApprove(id) {
+  const r = await apiFetch('/admin/approve/' + id, { method: 'POST' });
+  if (r && r.ok) { showMsg('Approved!'); loadContributions('pending'); }
+  else showMsg(r ? r.data.message : 'Error', true);
+}
+
+async function doReject(id) {
+  const notes = document.getElementById('notes-' + id)?.value || '';
+  const r = await apiFetch('/admin/reject/' + id, { method: 'POST', body: JSON.stringify({ admin_notes: notes }) });
+  if (r && r.ok) { showMsg('Rejected!'); loadContributions('pending'); }
+  else showMsg(r ? r.data.message : 'Error', true);
+}
+
+async function doDelete(id) {
+  if (!confirm('Delete this contribution?')) return;
+  const r = await apiFetch('/admin/delete/' + id, { method: 'DELETE' });
+  if (r && r.ok) { showMsg('Deleted!'); loadContributions(); }
+  else showMsg(r ? r.data.message : 'Error', true);
+}
+
+function showMsg(msg, isError) {
+  const el = document.getElementById('dashMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = isError ? 'rgba(200,80,80,.15)' : 'rgba(74,158,122,.15)';
+  el.style.color = isError ? 'var(--red)' : 'var(--green)';
+  el.style.borderColor = isError ? 'var(--red)' : 'var(--green)';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// Init
+(async function() {
+  if (getToken()) {
+    const r = await apiFetch('/auth/check');
+    if (r && r.data && r.data.valid) { showDashboard(); return; }
+  }
+  showLogin();
+})();
+</script>
+</body>
+</html>
