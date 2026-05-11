@@ -36,4 +36,14 @@ $routes->group('api', static function ($routes) {
     });
 });
 
+// Admin pages (session-based auth)
+$routes->get('admin/login',              'Admin::login');
+$routes->post('admin/login',             'Admin::login');
+$routes->get('admin/dashboard',          'Admin::dashboard');
+$routes->post('admin/approve/(:num)',    'Admin::approve/$1');
+$routes->post('admin/reject/(:num)',     'Admin::reject/$1');
+$routes->post('admin/delete/(:num)',     'Admin::delete/$1');
+$routes->get('admin/logout',             'Admin::logout');
+$routes->get('admin',                    'Admin::dashboard');
+
 $routes->get('/', 'Home::index');
