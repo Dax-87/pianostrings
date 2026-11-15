@@ -123,18 +123,26 @@ module.exports = async (req, res) => {
       for (let n = 1; n <= total; n++) {
         const sec = sections.find(s => n >= s.string_from && n <= s.string_to);
         if (sec) {
-          const gr = gaugeMap[parseFloat(sec.gauge)];
+          // gauge puo' essere NULL: le corde avvolte Yamaha/Kawai non hanno
+          // diametro pubblicato dal costruttore.
+          const hasGauge = sec.gauge !== null && sec.gauge !== undefined && sec.gauge !== '';
+          const gaugeNum = hasGauge ? parseFloat(sec.gauge) : null;
+          const gr = gaugeNum !== null ? gaugeMap[gaugeNum] : null;
           strings.push({
             number: n, note: stringToNote(n), type: sec.type,
-            gauge: parseFloat(sec.gauge),
+            gauge: gaugeNum,
             diameter_mm: gr ? parseFloat(gr.diameter_mm) : null,
             weight_gm: gr ? parseFloat(gr.weight_gm) : null,
             resist_kg: gr ? parseFloat(gr.resist_kg) : null,
             copper1: sec.copper1 ? parseFloat(sec.copper1) : null,
             copper2: sec.copper2 ? parseFloat(sec.copper2) : null,
+            strings_per_note: sec.strings_per_note !== null && sec.strings_per_note !== undefined
+              ? parseInt(sec.strings_per_note, 10) : null,
+            part_no_from: sec.part_no_from || null,
+            part_no_to: sec.part_no_to || null,
           });
         } else {
-          strings.push({ number: n, note: stringToNote(n), type: 'plain', gauge: null, diameter_mm: null, weight_gm: null, resist_kg: null, copper1: null, copper2: null });
+          strings.push({ number: n, note: stringToNote(n), type: 'plain', gauge: null, diameter_mm: null, weight_gm: null, resist_kg: null, copper1: null, copper2: null, strings_per_note: null, part_no_from: null, part_no_to: null });
         }
       }
       return json(res, {
@@ -276,7 +284,7 @@ async function approveContribution(id, res) {
     }
     await conn.query('DELETE FROM ps_string_sections WHERE model_id = ?', [modelId]);
     for (const s of sections) {
-      await conn.query('INSERT INTO ps_string_sections (model_id, string_from, string_to, type, gauge, copper1, copper2, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())', [modelId, s.from, s.to, s.type, s.gauge, s.copper1 || null, s.copper2 || null]);
+      await conn.query('INSERT INTO ps_string_sections (model_id, string_from, string_to, type, gauge, copper1, copper2, strings_per_note, part_no_from, part_no_to, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())', [modelId, s.from, s.to, s.type, s.gauge === undefined ? null : s.gauge, s.copper1 || null, s.copper2 || null, s.strings_per_note || null, s.part_no_from || null, s.part_no_to || null]);
     }
     await conn.query('UPDATE ps_contributions SET status = ?, updated_at = NOW() WHERE id = ?', ['approved', id]);
     await conn.commit();

@@ -10,7 +10,7 @@
     --bg:#0d0d0f;--bg2:#13131a;--bg3:#1a1a24;--border:#2a2a38;--border2:#3a3a50;
     --text:#e8e4dc;--text2:#a09890;--text3:#6a6278;
     --accent:#c8a96e;--accent2:#e8c98e;--accent-glow:rgba(200,169,110,0.15);
-    --plain:#4a9e7a;--wound1:#c87850;--wound2:#a05030;
+    --plain:#4a9e7a;--wound:#8a8a8a;--wound1:#c87850;--wound2:#a05030;
     --row-alt:rgba(255,255,255,0.02);--shadow:0 20px 60px rgba(0,0,0,0.6);
     --card-shadow:0 4px 24px rgba(0,0,0,0.4);
     --info-bg:rgba(200,169,110,0.06);--info-border:rgba(200,169,110,0.2);
@@ -19,7 +19,7 @@
     --bg:#f4f0e8;--bg2:#ede8dc;--bg3:#ffffff;--border:#d8d0c0;--border2:#c0b8a8;
     --text:#1a1612;--text2:#5a5248;--text3:#8a8278;
     --accent:#8a6020;--accent2:#6a4810;--accent-glow:rgba(138,96,32,0.1);
-    --plain:#2a7a5a;--wound1:#a05830;--wound2:#803820;
+    --plain:#2a7a5a;--wound:#6a6a6a;--wound1:#a05830;--wound2:#803820;
     --row-alt:rgba(0,0,0,0.02);--shadow:0 20px 60px rgba(0,0,0,0.15);
     --card-shadow:0 4px 24px rgba(0,0,0,0.08);
     --info-bg:rgba(138,96,32,0.05);--info-border:rgba(138,96,32,0.2);
@@ -78,6 +78,7 @@
   .qr-divider{width:1px;height:44px;background:var(--border);flex-shrink:0}
   .qr-type-badge{display:inline-block;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:4px;margin-top:3px}
   .badge-plain{background:rgba(74,158,122,.15);color:var(--plain);border:1px solid var(--plain)}
+  .badge-wound{background:rgba(138,138,138,.15);color:var(--wound);border:1px solid var(--wound)}
   .badge-wound1{background:rgba(200,120,80,.15);color:var(--wound1);border:1px solid var(--wound1)}
   .badge-wound2{background:rgba(160,80,48,.15);color:var(--wound2);border:1px solid var(--wound2)}
   .official-badge{display:inline-flex;align-items:center;gap:6px;background:var(--info-bg);border:1px solid var(--info-border);border-radius:6px;padding:4px 10px;font-size:.6rem;letter-spacing:.12em;color:var(--accent);margin-top:6px}
@@ -89,7 +90,7 @@
   .legend{display:flex;gap:14px;flex-wrap:wrap}
   .legend-item{display:flex;align-items:center;gap:5px;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
   .legend-dot{width:7px;height:7px;border-radius:50%}
-  .dot-plain{background:var(--plain)}.dot-wound1{background:var(--wound1)}.dot-wound2{background:var(--wound2)}
+  .dot-plain{background:var(--plain)}.dot-wound{background:var(--wound)}.dot-wound1{background:var(--wound1)}.dot-wound2{background:var(--wound2)}
   .col-toggle{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
   .col-btn{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);cursor:pointer;transition:all .2s;font-family:'DM Mono',monospace}
   .col-btn.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
@@ -565,6 +566,8 @@ function stringToNote(n) {
 function typeLabel(t) {
   const en = currentLang === 'en';
   if (t === 'plain')  return {label: en ? 'Plain'  : 'Liscia',  cls:'badge-plain',  dot:'plain'};
+  // 'wound': corda avvolta di cui il costruttore non dichiara il tipo di avvolgimento
+  if (t === 'wound')  return {label: en ? 'Wound'  : 'Avvolta', cls:'badge-wound',  dot:'wound'};
   if (t === 'wound1') return {label: en ? '1st wrap' : '1° avv.', cls:'badge-wound1', dot:'wound1'};
   return                   {label: en ? '2nd wrap' : '2° avv.', cls:'badge-wound2', dot:'wound2'};
 }
