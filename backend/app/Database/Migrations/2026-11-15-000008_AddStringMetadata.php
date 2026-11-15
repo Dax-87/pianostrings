@@ -17,6 +17,9 @@ use CodeIgniter\Database\Migration;
  *
  * Le modifiche sono condizionali: se le colonne esistono gia' (es. database
  * allineato a mano) la migrazione non fa nulla e non fallisce.
+ *
+ * Nessun AFTER: TiDB rifiuta un AFTER che punta a una colonna aggiunta nella
+ * stessa ALTER ("Unknown column ... in ps_string_sections"), MySQL 8 lo accetta.
  */
 class AddStringMetadata extends Migration
 {
@@ -29,9 +32,9 @@ class AddStringMetadata extends Migration
         $this->db->query("ALTER TABLE `ps_string_sections`
             MODIFY COLUMN `type` enum('plain','wound','wound1','wound2') NOT NULL DEFAULT 'plain',
             MODIFY COLUMN `gauge` decimal(4,1) DEFAULT NULL,
-            ADD COLUMN `strings_per_note` tinyint(4) DEFAULT NULL AFTER `copper2`,
-            ADD COLUMN `part_no_from` varchar(20) DEFAULT NULL AFTER `strings_per_note`,
-            ADD COLUMN `part_no_to` varchar(20) DEFAULT NULL AFTER `part_no_from`");
+            ADD COLUMN `strings_per_note` tinyint(4) DEFAULT NULL,
+            ADD COLUMN `part_no_from` varchar(20) DEFAULT NULL,
+            ADD COLUMN `part_no_to` varchar(20) DEFAULT NULL");
     }
 
     public function down()
