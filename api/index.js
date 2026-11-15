@@ -2,11 +2,20 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
+// Le credenziali arrivano SOLO da variabili d'ambiente: nessun valore di
+// default nel codice. Se mancano, l'app deve fallire, non connettersi a un
+// database noto a chiunque legga il repository.
+for (const key of ['DB_HOST', 'DB_USER', 'DB_PASSWORD']) {
+  if (!process.env[key]) {
+    throw new Error('Variabile d\'ambiente mancante: ' + key);
+  }
+}
+
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
+  host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT || '4000'),
-  user: process.env.DB_USER || 'MVo3iYEZNmbFX1Y.root',
-  password: process.env.DB_PASSWORD || 'gIYzGORgr3mLoe3c',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || 'pianostrings_db',
   ssl: { rejectUnauthorized: false },
   waitForConnections: true,
