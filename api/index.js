@@ -2,20 +2,19 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-// Le credenziali arrivano SOLO da variabili d'ambiente: nessun valore di
-// default nel codice. Se mancano, l'app deve fallire, non connettersi a un
-// database noto a chiunque legga il repository.
-for (const key of ['DB_HOST', 'DB_USER', 'DB_PASSWORD']) {
-  if (!process.env[key]) {
-    throw new Error('Variabile d\'ambiente mancante: ' + key);
-  }
-}
-
+// ATTENZIONE — istanza DEMO.
+// Le variabili d'ambiente DB_* hanno la precedenza. Se non sono impostate si
+// usano i valori qui sotto, cosi' il deploy dimostrativo resta in piedi senza
+// configurazione. Per un uso reale: imposta DB_HOST/DB_USER/DB_PASSWORD su
+// Vercel, cancella questi default e ruota la password del database.
+//
+// Questa credenziale e' pubblica (e' nella storia del repository): chiunque
+// puo' leggere e scrivere il database di questa demo.
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
+  host: process.env.DB_HOST || 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
   port: parseInt(process.env.DB_PORT || '4000'),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  user: process.env.DB_USER || 'MVo3iYEZNmbFX1Y.root',
+  password: process.env.DB_PASSWORD || 'gIYzGORgr3mLoe3c',
   database: process.env.DB_NAME || 'pianostrings_db',
   ssl: { rejectUnauthorized: false },
   waitForConnections: true,
