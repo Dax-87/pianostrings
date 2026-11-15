@@ -41,9 +41,13 @@ class Strings extends ResourceController
                 }
             }
 
-            $gauge = $section ? (float)$section->gauge : null;
-            $gaugeKey = $section ? sprintf('%.1f', (float)$section->gauge) : null;
-            $gaugeRef = $gaugeKey && isset($gaugeMap[$gaugeKey]) ? $gaugeMap[$gaugeKey] : null;
+            // gauge puo' essere NULL: le corde avvolte Yamaha/Kawai non hanno
+            // diametro pubblicato dal costruttore.
+            $gaugeRaw = $section ? $section->gauge : null;
+            $hasGauge = $gaugeRaw !== null && $gaugeRaw !== '';
+            $gauge = $hasGauge ? (float) $gaugeRaw : null;
+            $gaugeKey = $gauge !== null ? sprintf('%.1f', $gauge) : null;
+            $gaugeRef = $gaugeKey !== null && isset($gaugeMap[$gaugeKey]) ? $gaugeMap[$gaugeKey] : null;
 
             $note = $this->stringToNote($n);
 
@@ -57,6 +61,9 @@ class Strings extends ResourceController
                 'resist_kg'   => $gaugeRef ? (float)$gaugeRef->resist_kg : null,
                 'copper1'   => $section ? ($section->copper1 ? (float)$section->copper1 : null) : null,
                 'copper2'   => $section ? ($section->copper2 ? (float)$section->copper2 : null) : null,
+                'strings_per_note' => ($section && $section->strings_per_note !== null) ? (int)$section->strings_per_note : null,
+                'part_no_from'     => $section ? $section->part_no_from : null,
+                'part_no_to'       => $section ? $section->part_no_to : null,
             ];
         }
 

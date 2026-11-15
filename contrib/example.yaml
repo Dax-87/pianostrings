@@ -32,10 +32,16 @@ contributor_email: mario@example.com
 #   from     — first string number (1 = lowest bass note A0)
 #   to       — last string number (88 = highest treble note C8)
 #   type     — "plain" for bare steel, "wound1" for single copper wrap,
-#              "wound2" for double copper wrap
+#              "wound2" for double copper wrap, "wound" when the maker does
+#              not say whether the winding is single or double
 #   gauge    — European gauge number (e.g. 13, 13.5, 14, 15, 16, 17, etc.)
+#              Can be OMITTED for wound strings when the maker does not
+#              publish the core diameter (Yamaha and Kawai do not)
 #   copper1  — first copper winding gauge (only for wound strings)
 #   copper2  — second copper winding gauge (only for wound2 strings)
+#   strings_per_note — 1, 2 or 3 (monochord / bichord / trichord). Optional.
+#   part_no_from / part_no_to — maker part numbers for that range of strings.
+#              Optional, useful when gauge is not published.
 #
 # IMPORTANT: Make sure the sections cover ALL strings from 1 to 88
 # without gaps or overlaps.
@@ -52,3 +58,9 @@ sections:
   - from: 74    to: 78    type: plain   gauge: 14
   - from: 79    to: 82    type: plain   gauge: 13.5
   - from: 83    to: 88    type: plain   gauge: 13
+
+# Example of a wound section without published diameter (e.g. Yamaha/Kawai):
+#  - from: 1     to: 13    type: wound   strings_per_note: 1
+#  - from: 14    to: 31    type: wound   strings_per_note: 2
+#                           part_no_from: T0511130
+#                           part_no_to: T0511480
