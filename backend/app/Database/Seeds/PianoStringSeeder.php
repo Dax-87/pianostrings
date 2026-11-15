@@ -4,6 +4,14 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
+/**
+ * Dati di riferimento: marche, tabella calibri europea, Steinway ufficiale.
+ *
+ * NON contiene Yamaha / Kawai / Estonia / August Forster: sono ~2200 righe e
+ * stanno in `database/seed-brands.sql`, da importare dopo questo seeder:
+ *
+ *   mysql -u root -p pianostrings_db < database/seed-brands.sql
+ */
 class PianoStringSeeder extends Seeder
 {
     public function run()

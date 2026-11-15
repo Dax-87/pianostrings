@@ -17,6 +17,12 @@ You only need to know:
 - The **string numbers** where each section starts and ends
 - The **type** (plain steel, single wrap, or double wrap)
 - The **copper winding gauge** (for wound strings only)
+- Optionally: `strings_per_note` (1/2/3) and the maker's part numbers
+
+If the maker does not publish the core diameter of wound strings (Yamaha and
+Kawai do not), set `type: wound` and omit `gauge`. The API returns `gauge: null`
+for those strings and the UI shows "—"; use `part_no_from` / `part_no_to` to
+identify the exact string.
 
 The system automatically calculates:
 - Diameter in mm
@@ -57,6 +63,12 @@ sections:
   - from: 52  to: 56  type: plain   gauge: 16
   ...
   - from: 83  to: 88  type: plain   gauge: 13
+
+# Wound strings without a published diameter:
+#  - from: 1   to: 13  type: wound  strings_per_note: 1
+#  - from: 14  to: 31  type: wound  strings_per_note: 2
+#                      part_no_from: T0511130
+#                      part_no_to: T0511480
 ```
 
 4. **Save and submit a Pull Request**
@@ -70,6 +82,7 @@ That's it! We'll review and approve your contribution.
 | `plain` | Bare steel wire | Treble strings |
 | `wound1` | Steel core + single copper wrap | Mid-low bass |
 | `wound2` | Steel core + double copper wrap | Lowest bass |
+| `wound` | Wound, winding type not stated by the maker | Yamaha / Kawai bass |
 
 ## Tips
 

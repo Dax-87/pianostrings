@@ -2,6 +2,8 @@ CREATE DATABASE IF NOT EXISTS `pianostrings_db` DEFAULT CHARACTER SET utf8mb4 CO
 
 USE `pianostrings_db`;
 
+DROP TABLE IF EXISTS `ps_contributions`;
+DROP TABLE IF EXISTS `ps_admins`;
 DROP TABLE IF EXISTS `ps_official_steinway`;
 DROP TABLE IF EXISTS `ps_string_sections`;
 DROP TABLE IF EXISTS `ps_gauge_reference`;
@@ -40,10 +42,13 @@ CREATE TABLE `ps_string_sections` (
   `section_name` varchar(200) DEFAULT NULL,
   `string_from` int NOT NULL,
   `string_to` int NOT NULL,
-  `type` enum('plain','wound1','wound2') NOT NULL DEFAULT 'plain',
-  `gauge` decimal(4,1) NOT NULL,
+  `type` enum('plain','wound','wound1','wound2') NOT NULL DEFAULT 'plain',
+  `gauge` decimal(4,1) DEFAULT NULL,
   `copper1` decimal(5,2) DEFAULT NULL,
   `copper2` decimal(5,2) DEFAULT NULL,
+  `strings_per_note` tinyint DEFAULT NULL,
+  `part_no_from` varchar(20) DEFAULT NULL,
+  `part_no_to` varchar(20) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -89,4 +94,33 @@ CREATE TABLE `ps_official_steinway` (
   `created_at`   datetime     DEFAULT CURRENT_TIMESTAMP,
   `updated_at`   datetime     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `ps_admins` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(60) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(128) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `ps_contributions` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `brand_name` varchar(100) NOT NULL,
+  `model_code` varchar(60) NOT NULL,
+  `model_name` varchar(255) NOT NULL,
+  `total_strings` tinyint NOT NULL DEFAULT '88',
+  `sections_json` json NOT NULL,
+  `contributor` varchar(120) DEFAULT NULL,
+  `contributor_email` varchar(120) DEFAULT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `admin_notes` text,
+  `source_file` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
